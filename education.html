@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Education Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #9caf88;
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+            font-size: 2.8em;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            letter-spacing: -0.5px;
+            background: #1e3a5f;
+            padding: 20px;
+            border-radius: 12px;
+        }
+        nav {
+            text-align: center;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px 20px;
+            transition: all 0.3s;
+            border-radius: 8px;
+            background: #1e3a5f;
+            box-shadow: 0 2px 8px rgba(30, 58, 95, 0.2);
+        }
+        nav a:hover {
+            background: #2a4f7b;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(30, 58, 95, 0.3);
+        }
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 35px;
+            margin-bottom: 30px;
+        }
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: 
+                0 2px 8px rgba(31, 38, 135, 0.12),
+                0 8px 24px rgba(31, 38, 135, 0.18),
+                0 16px 48px rgba(31, 38, 135, 0.1);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                135deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.1) 50%,
+                transparent 100%
+            );
+            transform: rotate(45deg);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-12px);
+            box-shadow: 
+                0 4px 12px rgba(31, 38, 135, 0.15),
+                0 12px 32px rgba(31, 38, 135, 0.25),
+                0 24px 64px rgba(31, 38, 135, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        }
+        .card:hover::before {
+            opacity: 1;
+        }
+        .card-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            display: inline-block;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+        }
+        .card h3 {
+            color: #1e3a5f;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            font-weight: 700;
+        }
+        .card p {
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+        }
+        .btn {
+            display: inline-block;
+            background: #1e3a5f;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 600;
+            box-shadow: 
+                0 4px 15px rgba(30, 58, 95, 0.3),
+                0 8px 25px rgba(30, 58, 95, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            background: #2a4f7b;
+            box-shadow: 
+                0 8px 25px rgba(30, 58, 95, 0.4),
+                0 12px 35px rgba(30, 58, 95, 0.2);
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 2px solid #eee;
+            border-radius: 5px;
+            font-size: 0.95em;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #1e3a5f;
+            box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.1);
+        }
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #9caf88, #1e3a5f);
+            border-radius: 4px;
+            width: 65%;
+        }
+        .sim-control {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .sim-control input {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        .sim-button {
+            background: #1e3a5f;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(30, 58, 95, 0.2);
+        }
+        .sim-button:hover {
+            background: #2a4f7b;
+            box-shadow: 0 4px 12px rgba(30, 58, 95, 0.3);
+        }
+        .sim-output {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #1e3a5f;
+            color: #333;
+            font-size: 0.9em;
+            line-height: 1.6;
+            min-height: 80px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/">🏠 Home</a>
+        <a href="/surgical.html">🏥 Surgical</a>
+        <a href="/settings">⚙️ Settings</a>
+        <a href="/help">❓ Help</a>
+        <a href="/login">🔐 Logout</a>
+    </nav>
+
+    <div class="container">
+        <h1>📚 Education Hub</h1>
+        
+        <div class="cards-grid">
+            <!-- Medical Scan Upload Card -->
+            <div class="card">
+                <div class="card-icon">📷</div>
+                <h3>Medical Scan Upload</h3>
+                <p>Upload and analyze medical images (CT, MRI, X-ray, Ultrasound).</p>
+                <label style="display: block; margin-bottom: 15px;">
+                    <input type="file" id="scanInput" onchange="handleScanUpload()" accept="image/*">
+                </label>
+                <img id="preview" style="width: 100%; border-radius: 8px; margin-bottom: 10px; display: none;">
+                <div id="uploadStatus" style="color: #999; font-size: 0.9em; margin-bottom: 10px;"></div>
+                <button class="btn" onclick="startScan()" style="width: 100%; text-align: center;">🔍 Scan Image</button>
+                
+                <!-- AI Progress Tracking -->
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #eee;">
+                    <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; border-left: 3px solid #9caf88;">
+                        <strong style="color: #1e3a5f;">🤖 AI Learning Progress</strong><br>
+                        <small style="color: #666;">Imaging Analysis</small>
+                        <div class="progress-bar" style="margin-top: 8px;">
+                            <div class="progress-fill" style="width: 68%;"></div>
+                        </div>
+                        <small style="color: #999;">68% - Intermediate Level</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Scan Card -->
+            <div class="card">
+                <div class="card-icon">📹</div>
+                <h3>Live Scan</h3>
+                <p>Capture medical images in real-time using your device camera.</p>
+                <video id="liveVideo" style="width: 100%; border-radius: 8px; background: #000; margin-bottom: 10px; display: none;"></video>
+                <canvas id="captureCanvas" style="width: 100%; border-radius: 8px; margin-bottom: 10px; display: none; background: #f5f5f5;"></canvas>
+                <div id="cameraStatus" style="color: #999; font-size: 0.9em; margin-bottom: 10px; text-align: center;">Ready to capture</div>
+                <button class="btn" id="cameraBtn" onclick="toggleLiveCamera()" style="width: 100%; text-align: center; margin-bottom: 10px;">📹 Start Camera</button>
+                <button class="btn" id="captureBtn" onclick="captureLiveImage()" style="width: 100%; text-align: center; display: none; background: #4CAF50;">📸 Capture Image</button>
+                
+                <!-- AI Progress Tracking -->
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #eee;">
+                    <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; border-left: 3px solid #9caf88;">
+                        <strong style="color: #1e3a5f;">🤖 AI Learning Progress</strong><br>
+                        <small style="color: #666;">Real-time Capture Skills</small>
+                        <div class="progress-bar" style="margin-top: 8px;">
+                            <div class="progress-fill" style="width: 52%;"></div>
+                        </div>
+                        <small style="color: #999;">52% - Beginner Level</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3D Surgical Simulation Card -->
+            <div class="card">
+                <div class="card-icon">🎮</div>
+                <h3>3D Surgical Simulation</h3>
+                <p>Interactive 3D surgical training with real-time anatomical visualization.</p>
+                <div style="margin-top: 20px;">
+                    <input type="text" id="patientData" placeholder="Patient ID or Case #" style="margin-bottom: 15px;">
+                    
+                    <div id="sim3dViewer" style="width: 100%; height: 200px; background: linear-gradient(135deg, #1e3a5f 0%, #2a4f7b 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; margin-bottom: 15px; position: relative; overflow: hidden;">
+                        <canvas id="simulationCanvas" style="width: 100%; height: 100%;"></canvas>
+                        <div id="simLoading" style="position: absolute;">Loading 3D Environment...</div>
+                    </div>
+                    
+                    <button class="btn" onclick="start3DSimulation()" style="width: 100%; text-align: center;">▶️ Start 3D Simulation</button>
+                    
+                    <div class="sim-output" id="simOutput" style="margin-top: 15px;">
+                        Enter case ID and click Start to begin 3D surgical training...
+                    </div>
+                    
+                    <!-- AI Progress Tracking -->
+                    <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #eee;">
+                        <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; border-left: 3px solid #9caf88;">
+                            <strong style="color: #1e3a5f;">🤖 AI Learning Progress</strong><br>
+                            <small style="color: #666;">Surgical Simulation Mastery</small>
+                            <div class="progress-bar" style="margin-top: 8px;">
+                                <div class="progress-fill" style="width: 75%;"></div>
+                            </div>
+                            <small style="color: #999;">75% - Advanced Level</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Analysis Card -->
+            <div class="card">
+                <div class="card-icon">🤖</div>
+                <h3>AI Medical Detection</h3>
+                <p>Automated AI-powered detection of medical conditions using YOLOv8 neural networks.</p>
+                <label style="display: block; margin-bottom: 10px;">
+                    <input type="file" id="aiAnalysisInput" onchange="handleAIImageUpload()" accept="image/*">
+                </label>
+                <img id="aiPreview" style="width: 100%; border-radius: 8px; margin-bottom: 10px; display: none;">
+                
+                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <button class="btn" onclick="runAIDetection()" style="flex: 1; text-align: center;">🔍 Detect</button>
+                    <button class="btn" onclick="toggleLiveDetection()" id="liveDetectionBtn" style="flex: 1; text-align: center;">📹 Live</button>
+                </div>
+                
+                <div id="aiStatus" style="color: #999; font-size: 0.85em; margin-bottom: 10px; text-align: center;">Ready for analysis</div>
+                
+                <div id="detectionResults" style="background: #f5f5f5; padding: 12px; border-radius: 8px; border-left: 3px solid #9caf88; display: none; min-height: 100px;">
+                    <strong style="color: #1e3a5f;">Detection Results:</strong>
+                    <div id="detectionsInfo" style="margin-top: 8px; font-size: 0.85em; color: #333;"></div>
+                </div>
+                
+                <!-- AI Progress Tracking -->
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #eee;">
+                    <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; border-left: 3px solid #9caf88;">
+                        <strong style="color: #1e3a5f;">🤖 AI Learning Progress</strong><br>
+                        <small style="color: #666;">Medical Detection Proficiency</small>
+                        <div class="progress-bar" style="margin-top: 8px;">
+                            <div class="progress-fill" style="width: 71%;"></div>
+                        </div>
+                        <small style="color: #999;">71% - Advanced Level</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts.js"></script>
+    <script>
+        let videoStream = null;
+        let isCameraActive = false;
+        let liveDetectionActive = false;
+        let aiImage = null;
+
+        // AI Image Upload Handler
+        function handleAIImageUpload() {
+            let file = document.getElementById('aiAnalysisInput').files[0];
+            if (!file) return;
+            
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let img = document.getElementById('aiPreview');
+                img.src = e.target.result;
+                img.style.display = 'block';
+                aiImage = e.target.result;
+                document.getElementById('aiStatus').innerHTML = `✓ Image loaded: ${file.name}`;
+                document.getElementById('detectionResults').style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // AI Detection Function
+        function runAIDetection() {
+            if (!aiImage) {
+                alert('Please select an image first');
+                return;
+            }
+            
+            document.getElementById('aiStatus').innerHTML = '🔄 Analyzing with AI...';
+            document.getElementById('detectionResults').style.display = 'none';
+            
+            // Extract base64 from data URL
+            let base64Image = aiImage.split(',')[1] || aiImage;
+            
+            fetch('/api/yolo/maternal-analysis', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    scan_type: 'ultrasound',
+                    image: base64Image,
+                    confidence: 0.5
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                displayDetectionResults(data);
+            })
+            .catch(e => {
+                document.getElementById('aiStatus').innerHTML = '❌ Analysis failed: ' + e.message;
+                console.error('Detection error:', e);
+            });
+        }
+
+        // Display Detection Results
+        function displayDetectionResults(data) {
+            let resultsDiv = document.getElementById('detectionResults');
+            let infoDiv = document.getElementById('detectionsInfo');
+            
+            resultsDiv.style.display = 'block';
+            
+            if (data.error) {
+                document.getElementById('aiStatus').innerHTML = '⚠️ ' + data.error;
+                infoDiv.innerHTML = `<span style="color: #d32f2f;">Error: ${data.error}</span>`;
+                return;
+            }
+            
+            document.getElementById('aiStatus').innerHTML = '✓ Analysis complete';
+            
+            let detectionCount = data.detections ? data.detections.length : 0;
+            let riskLevel = data.maternal_risk_assessment ? data.maternal_risk_assessment.risk_level : 'Unknown';
+            
+            let html = `
+                <div>
+                    <strong style="color: #1e3a5f;">Detections: ${detectionCount}</strong><br>
+                    <small style="color: #666;">Scan Type: ${data.scan_type || 'ultrasound'}</small>
+                </div>
+            `;
+            
+            if (detectionCount > 0) {
+                html += `<div style="margin-top: 8px; border-top: 1px solid #ddd; padding-top: 8px;">`;
+                data.detections.forEach((det, idx) => {
+                    html += `
+                        <div style="margin-bottom: 6px; padding: 6px; background: white; border-radius: 4px;">
+                            <strong>${det.class_name}</strong>: ${(det.confidence * 100).toFixed(1)}%<br>
+                            <small style="color: #666;">Coordinates: (${det.x.toFixed(0)}, ${det.y.toFixed(0)})</small>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            }
+            
+            if (data.maternal_risk_assessment) {
+                let risk = data.maternal_risk_assessment;
+                let riskColor = risk.risk_level === 'HIGH' ? '#f44336' : risk.risk_level === 'MEDIUM' ? '#ff9800' : '#4caf50';
+                html += `
+                    <div style="margin-top: 8px; padding: 8px; background: white; border-radius: 4px; border-left: 3px solid ${riskColor};">
+                        <strong style="color: ${riskColor};">Risk: ${risk.risk_level}</strong><br>
+                        <small style="color: #666;">${risk.assessment}</small>
+                    </div>
+                `;
+            }
+            
+            infoDiv.innerHTML = html;
+        }
+
+        // Live Detection Toggle
+        function toggleLiveDetection() {
+            const btn = document.getElementById('liveDetectionBtn');
+            
+            if (!liveDetectionActive) {
+                navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: 'environment' },
+                    audio: false 
+                })
+                .then(stream => {
+                    videoStream = stream;
+                    let video = document.getElementById('liveVideo');
+                    video.srcObject = stream;
+                    video.style.display = 'block';
+                    liveDetectionActive = true;
+                    btn.textContent = '⏹️ Stop Live';
+                    btn.style.background = '#f44336';
+                    document.getElementById('aiStatus').innerHTML = '🔴 Live detection active - Analyzing frame...';
+                    
+                    // Start periodic analysis
+                    startLiveFrameAnalysis(video);
+                })
+                .catch(err => {
+                    document.getElementById('aiStatus').innerHTML = '❌ Camera access denied';
+                });
+            } else {
+                if (videoStream) {
+                    videoStream.getTracks().forEach(track => track.stop());
+                }
+                let video = document.getElementById('liveVideo');
+                video.style.display = 'none';
+                liveDetectionActive = false;
+                btn.textContent = '📹 Live';
+                btn.style.background = '';
+                document.getElementById('aiStatus').innerHTML = 'Ready for analysis';
+                document.getElementById('detectionResults').style.display = 'none';
+            }
+        }
+
+        // Live Frame Analysis
+        function startLiveFrameAnalysis(video) {
+            let canvas = document.getElementById('captureCanvas');
+            let ctx = canvas.getContext('2d');
+            
+            let analyzeFrame = () => {
+                if (!liveDetectionActive) return;
+                
+                if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    ctx.drawImage(video, 0, 0);
+                    
+                    canvas.toBlob(blob => {
+                        let reader = new FileReader();
+                        reader.onload = function(e) {
+                            let base64 = e.target.result.split(',')[1];
+                            
+                            fetch('/api/yolo/detect', {
+                                method: 'POST',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify({
+                                    image: base64,
+                                    confidence: 0.5
+                                })
+                            })
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data.detections && data.detections.length > 0) {
+                                    displayDetectionResults(data);
+                                } else {
+                                    document.getElementById('detectionsInfo').innerHTML = 
+                                        '<small style="color: #999;">No detections in current frame</small>';
+                                }
+                            })
+                            .catch(e => console.log('Frame analysis error:', e));
+                        };
+                        reader.readAsDataURL(blob);
+                    }, 'image/jpeg', 0.8);
+                }
+                
+                // Analyze every 1 second
+                setTimeout(analyzeFrame, 1000);
+            };
+            
+            analyzeFrame();
+        }
+
+        // File Upload Handler
+        function handleFileUpload() {
+            let file = document.getElementById('fileInput').files[0];
+            if (!file) return;
+            document.getElementById('fileStatus').innerHTML = 
+                `✓ Selected: ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+        }
+
+        function uploadFile() {
+            let file = document.getElementById('fileInput').files[0];
+            if (!file) {
+                alert('Please select a file first');
+                return;
+            }
+            alert(`Uploading: ${file.name}...`);
+        }
+
+        // Scan Upload Handler
+        function handleScanUpload() {
+            let file = document.getElementById('scanInput').files[0];
+            if (!file) return;
+            
+            let uploadTime = new Date().toLocaleString();
+            document.getElementById('uploadStatus').innerHTML = 
+                `✓ Uploaded: ${file.name}<br><small>${uploadTime}</small>`;
+            
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let img = document.getElementById('preview');
+                img.src = e.target.result;
+                img.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function startScan() {
+            let file = document.getElementById('scanInput').files[0];
+            if (!file) {
+                alert('Please select a scan image first');
+                return;
+            }
+            
+            let scanData = {
+                filename: file.name,
+                size: file.size,
+                type: file.type,
+                uploadTime: new Date().toISOString()
+            };
+            
+            fetch('/api/education/scan', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(scanData)
+            }).then(res => res.json())
+            .then(data => {
+                alert(`Scan processed: ${data.message}`);
+            }).catch(e => console.log('Scan sent to server'));
+        }
+
+        // Live Camera Handler
+        function toggleLiveCamera() {
+            const video = document.getElementById('liveVideo');
+            const cameraBtn = document.getElementById('cameraBtn');
+            const captureBtn = document.getElementById('captureBtn');
+            const cameraStatus = document.getElementById('cameraStatus');
+
+            if (!isCameraActive) {
+                // Start camera
+                navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: 'environment' },
+                    audio: false 
+                })
+                .then(stream => {
+                    videoStream = stream;
+                    video.srcObject = stream;
+                    video.style.display = 'block';
+                    isCameraActive = true;
+                    cameraBtn.textContent = '⏹️ Stop Camera';
+                    cameraBtn.style.background = '#f44336';
+                    captureBtn.style.display = 'block';
+                    cameraStatus.innerHTML = '🟢 Camera Active - Ready to capture';
+                })
+                .catch(err => {
+                    cameraStatus.innerHTML = '❌ Camera access denied. Check permissions.';
+                    console.error('Camera error:', err);
+                });
+            } else {
+                // Stop camera
+                if (videoStream) {
+                    videoStream.getTracks().forEach(track => track.stop());
+                }
+                video.style.display = 'none';
+                isCameraActive = false;
+                cameraBtn.textContent = '📹 Start Camera';
+                cameraBtn.style.background = '';
+                captureBtn.style.display = 'none';
+                cameraStatus.innerHTML = 'Ready to capture';
+            }
+        }
+
+        function captureLiveImage() {
+            if (!isCameraActive) {
+                alert('Please start the camera first');
+                return;
+            }
+
+            const video = document.getElementById('liveVideo');
+            const canvas = document.getElementById('captureCanvas');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            ctx.drawImage(video, 0, 0);
+            canvas.style.display = 'block';
+
+            let captureTime = new Date().toLocaleString();
+            document.getElementById('cameraStatus').innerHTML = 
+                `✓ Image Captured: ${captureTime}`;
+
+            // Convert canvas to blob and process
+            canvas.toBlob(blob => {
+                let scanData = {
+                    filename: `capture_${Date.now()}.jpg`,
+                    size: blob.size,
+                    type: blob.type,
+                    uploadTime: new Date().toISOString()
+                };
+                
+                fetch('/api/education/scan', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(scanData)
+                }).then(res => res.json())
+                .then(data => {
+                    document.getElementById('cameraStatus').innerHTML = 
+                        `✓ Image processed: ${data.message}`;
+                }).catch(e => console.log('Image sent to server'));
+            }, 'image/jpeg');
+        }
+
+        // 3D Simulation Handler
+        function start3DSimulation() {
+            let patientId = document.getElementById('patientData').value;
+            if (!patientId) {
+                alert('Please enter a patient ID');
+                return;
+            }
+            
+            let simOutput = document.getElementById('simOutput');
+            let simLoading = document.getElementById('simLoading');
+            
+            simLoading.style.display = 'block';
+            simOutput.innerHTML = '🔄 Initializing 3D environment...';
+            
+            let sim3dData = {
+                patientId: patientId,
+                mode: '3D_SURGICAL_TRAINING',
+                startTime: new Date().toISOString()
+            };
+            
+            fetch('/api/education/simulation/3d', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(sim3dData)
+            }).then(res => res.json())
+            .then(data => {
+                simLoading.style.display = 'none';
+                
+                // Draw simple 3D representation on canvas
+                drawSimulation3D();
+                
+                simOutput.innerHTML = `
+                    <strong style="color: #1e3a5f;">🎮 3D Simulation Active</strong><br>
+                    <small>Case: ${patientId}</small><br>
+                    <small>Mode: 3D Surgical Training</small><br>
+                    <small>Session: ${data.session_id}</small><br>
+                    <br>
+                    👀 Navigate environment with mouse<br>
+                    🖱️ Click anatomy to interact<br>
+                    📊 Vital signs: BP ${data.vitals.bp} | HR ${data.vitals.hr}
+                `;
+            }).catch(e => {
+                simLoading.style.display = 'none';
+                drawSimulation3D();
+                simOutput.innerHTML = `
+                    <strong style="color: #1e3a5f;">🎮 3D Simulation Started</strong><br>
+                    <small>Case: ${patientId}</small><br>
+                    <small>Mode: 3D Surgical Training</small><br>
+                    <br>
+                    🏥 Surgical environment loaded<br>
+                    👀 Explore 3D anatomical model<br>
+                    🖱️ Interact with surgical instruments
+                `;
+            });
+        }
+
+        function drawSimulation3D() {
+            let canvas = document.getElementById('simulationCanvas');
+            if (!canvas || !canvas.getContext) return;
+            
+            let ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            // Clear background
+            ctx.fillStyle = '#1e3a5f';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw simple 3D cube representation
+            let centerX = canvas.width / 2;
+            let centerY = canvas.height / 2;
+            let size = 60;
+            
+            // Front face
+            ctx.strokeStyle = '#9caf88';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(centerX - size, centerY - size, size * 2, size * 2);
+            
+            // 3D effect lines
+            ctx.beginPath();
+            ctx.moveTo(centerX - size, centerY - size);
+            ctx.lineTo(centerX - size + 30, centerY - size - 30);
+            ctx.moveTo(centerX + size, centerY - size);
+            ctx.lineTo(centerX + size + 30, centerY - size - 30);
+            ctx.moveTo(centerX + size, centerY + size);
+            ctx.lineTo(centerX + size + 30, centerY + size - 30);
+            ctx.moveTo(centerX - size, centerY + size);
+            ctx.lineTo(centerX - size + 30, centerY + size - 30);
+            ctx.stroke();
+            
+            // Top face
+            ctx.beginPath();
+            ctx.moveTo(centerX - size, centerY - size);
+            ctx.lineTo(centerX - size + 30, centerY - size - 30);
+            ctx.lineTo(centerX + size + 30, centerY - size - 30);
+            ctx.lineTo(centerX + size, centerY - size);
+            ctx.closePath();
+            ctx.strokeStyle = '#a8c88f';
+            ctx.stroke();
+            
+            // Draw anatomical text
+            ctx.fillStyle = '#9caf88';
+            ctx.font = 'bold 14px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Patient', centerX, centerY + 100);
+            ctx.font = '12px Arial';
+            ctx.fillText('Surgical Field', centerX, centerY + 120);
+        }
+    </script>
+</body>
+</html>

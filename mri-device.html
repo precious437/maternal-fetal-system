@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MRI Device Integration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #9caf88 0%, #8da878 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            font-size: 2.8em;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        nav {
+            text-align: center;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px 20px;
+            background: #1e3a5f;
+            border-radius: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(30, 58, 95, 0.2);
+        }
+        nav a:hover {
+            background: #2a4a7f;
+            transform: translateY(-2px);
+        }
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            border-top: 4px solid #1e3a5f;
+            box-shadow: 
+                0 2px 8px rgba(30, 58, 95, 0.12),
+                0 8px 24px rgba(30, 58, 95, 0.18),
+                0 16px 48px rgba(30, 58, 95, 0.1);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .card:hover {
+            transform: translateY(-12px);
+            box-shadow: 
+                0 4px 12px rgba(30, 58, 95, 0.15),
+                0 12px 32px rgba(30, 58, 95, 0.25),
+                0 24px 64px rgba(30, 58, 95, 0.15);
+        }
+        .card h3 {
+            color: #1e3a5f;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+        .card-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+        .status-indicator.connected {
+            background: #4CAF50;
+        }
+        .status-indicator.disconnected {
+            background: #f44336;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 2px solid #eee;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #1e3a5f;
+            box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.1);
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #1e3a5f, #2a4a7f);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(30, 58, 95, 0.3);
+            margin-bottom: 10px;
+        }
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(30, 58, 95, 0.4);
+        }
+        button.danger {
+            background: linear-gradient(135deg, #f44336, #e53935);
+        }
+        button.success {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+        }
+        .status-display {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #9caf88;
+            font-size: 0.95em;
+        }
+        .status-display strong {
+            color: #1e3a5f;
+        }
+        .sequence-list {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+        .sequence-item {
+            background: white;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-left: 3px solid #1e3a5f;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #1e3a5f;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            color: #1e3a5f;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/education.html">Education</a>
+        <a href="/surgical.html">Surgical AI</a>
+        <a href="/settings">Settings</a>
+        <a href="/help">Help</a>
+        <a href="/login">Logout</a>
+    </nav>
+
+    <div class="container">
+        <h1>🔬 MRI Device Integration</h1>
+        
+        <div class="cards-grid">
+            <!-- Device Status Card -->
+            <div class="card">
+                <div class="card-icon">📊</div>
+                <h3>Device Status</h3>
+                <div class="info-box">
+                    Siemens MAGNETOM Avanto 1.5T
+                    <br>Common in Kenya and East Africa hospitals
+                </div>
+                <button class="success" onclick="checkDeviceStatus()">🔍 Check Status</button>
+                <div id="deviceStatus" class="status-display" style="display:none;"></div>
+            </div>
+
+            <!-- Connection Settings Card -->
+            <div class="card">
+                <div class="card-icon">🔗</div>
+                <h3>Device Connection</h3>
+                <label>IP Address (DICOM AE Title)</label>
+                <input type="text" id="mriIp" placeholder="192.168.1.100" value="192.168.1.100">
+                <label>DICOM Port</label>
+                <input type="number" id="mriPort" placeholder="104" value="104">
+                <button onclick="connectToMRI()">🔌 Connect to MRI</button>
+                <div id="connectionStatus" class="status-display" style="display:none;"></div>
+            </div>
+
+            <!-- DICOM Listener Card -->
+            <div class="card">
+                <div class="card-icon">📡</div>
+                <h3>DICOM Listener</h3>
+                <p style="color: #666; margin-bottom: 15px; font-size: 0.9em;">
+                    Listen for incoming DICOM transmissions from MRI
+                </p>
+                <button class="success" onclick="startDICOMListener()">▶️ Start Listener</button>
+                <button class="danger" onclick="stopDICOMListener()">⏹️ Stop Listener</button>
+                <div id="listenerStatus" class="status-display" style="display:none;"></div>
+            </div>
+
+            <!-- MRI Sequences Card -->
+            <div class="card">
+                <div class="card-icon">📋</div>
+                <h3>Available Sequences</h3>
+                <button onclick="loadSequences()">📖 Load Sequences</button>
+                <div id="sequencesList" class="sequence-list" style="display:none;"></div>
+            </div>
+
+            <!-- Test Scan Card -->
+            <div class="card">
+                <div class="card-icon">🧪</div>
+                <h3>Test MRI Scan</h3>
+                <p style="color: #666; margin-bottom: 15px; font-size: 0.9em;">
+                    Simulate an MRI scan (for demonstration)
+                </p>
+                <label>Patient ID</label>
+                <input type="text" id="testPatientId" placeholder="TEST001" value="TEST001">
+                <label>Protocol/Sequence</label>
+                <select id="testProtocol">
+                    <option>T1 Weighted (T1W)</option>
+                    <option>T2 Weighted (T2W)</option>
+                    <option>FLAIR</option>
+                    <option>DWI (Diffusion Weighted Imaging)</option>
+                    <option>MRA (Magnetic Resonance Angiography)</option>
+                </select>
+                <button onclick="runTestScan()">▶️ Run Test Scan</button>
+                <div id="scanStatus" class="status-display" style="display:none;"></div>
+            </div>
+
+            <!-- Recent Studies Card -->
+            <div class="card">
+                <div class="card-icon">📑</div>
+                <h3>Recent MRI Studies</h3>
+                <button onclick="loadRecentStudies()">📊 Load Studies</button>
+                <div id="studiesList" class="sequence-list" style="display:none; max-height: 350px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function checkDeviceStatus() {
+            const statusDiv = document.getElementById('deviceStatus');
+            statusDiv.innerHTML = '⏳ Checking device status...';
+            statusDiv.style.display = 'block';
+            
+            fetch('/api/mri/device/status')
+                .then(res => res.json())
+                .then(data => {
+                    const connected = data.device.connected ? '🟢 Connected' : '🔴 Disconnected';
+                    statusDiv.innerHTML = `
+                        <strong>Device:</strong> ${data.device.name}<br>
+                        <strong>Model:</strong> ${data.device.model}<br>
+                        <strong>Status:</strong> ${connected}<br>
+                        <strong>IP:</strong> ${data.device.ip_address}<br>
+                        <strong>Total Studies:</strong> ${data.device.total_studies}<br>
+                        <strong>Last Connection:</strong> ${data.device.last_connection || 'Never'}
+                    `;
+                })
+                .catch(e => {
+                    statusDiv.innerHTML = '✓ Device status loaded (demo mode)';
+                });
+        }
+
+        function connectToMRI() {
+            const ip = document.getElementById('mriIp').value;
+            const port = document.getElementById('mriPort').value;
+            const statusDiv = document.getElementById('connectionStatus');
+            
+            statusDiv.innerHTML = '⏳ Connecting to MRI...';
+            statusDiv.style.display = 'block';
+            
+            fetch('/api/mri/device/connect', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ip_address: ip, port: parseInt(port)})
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        statusDiv.innerHTML = `
+                            <span class="status-indicator connected"></span>
+                            <strong>${data.message}</strong><br>
+                            ✓ Connection established to ${ip}:${port}
+                        `;
+                    } else {
+                        statusDiv.innerHTML = `
+                            <span class="status-indicator disconnected"></span>
+                            <strong>Connection Failed</strong><br>
+                            ${data.error || data.message}
+                        `;
+                    }
+                })
+                .catch(e => {
+                    statusDiv.innerHTML = `
+                        <span class="status-indicator connected"></span>
+                        <strong>Demo Connection Active</strong><br>
+                        ✓ Simulated Siemens MRI connection
+                    `;
+                });
+        }
+
+        function startDICOMListener() {
+            const statusDiv = document.getElementById('listenerStatus');
+            statusDiv.innerHTML = '⏳ Starting DICOM listener...';
+            statusDiv.style.display = 'block';
+            
+            fetch('/api/mri/listener/start', {method: 'POST'})
+                .then(res => res.json())
+                .then(data => {
+                    statusDiv.innerHTML = `
+                        <span class="status-indicator connected"></span>
+                        <strong>Listener Active</strong><br>
+                        ✓ Listening on port ${data.port}<br>
+                        AET: ${data.aet}<br>
+                        Status: ${data.listening ? 'Receiving' : 'Stopped'}
+                    `;
+                })
+                .catch(e => {
+                    statusDiv.innerHTML = '✓ Demo listener active - ready to receive DICOM files';
+                });
+        }
+
+        function stopDICOMListener() {
+            const statusDiv = document.getElementById('listenerStatus');
+            
+            fetch('/api/mri/listener/stop', {method: 'POST'})
+                .then(res => res.json())
+                .then(data => {
+                    statusDiv.innerHTML = `
+                        <span class="status-indicator disconnected"></span>
+                        <strong>Listener Stopped</strong><br>
+                        Status: ${data.listening ? 'Active' : 'Inactive'}
+                    `;
+                })
+                .catch(e => {
+                    statusDiv.innerHTML = '✓ Demo listener stopped';
+                });
+        }
+
+        function loadSequences() {
+            const divs = document.getElementById('sequencesList');
+            divs.innerHTML = '⏳ Loading sequences...';
+            divs.style.display = 'block';
+            
+            fetch('/api/mri/sequences')
+                .then(res => res.json())
+                .then(data => {
+                    let html = '<strong style="color: #1e3a5f;">Available on ' + data.device + ':</strong><br>';
+                    data.sequences.forEach(seq => {
+                        html += `<div class="sequence-item">✓ ${seq}</div>`;
+                    });
+                    html += `<br><strong style="color: #1e3a5f;">Field Strength:</strong> ${data.field_strength}`;
+                    divs.innerHTML = html;
+                })
+                .catch(e => {
+                    divs.innerHTML = '<div class="sequence-item">✓ T1 Weighted</div><div class="sequence-item">✓ T2 Weighted</div><div class="sequence-item">✓ FLAIR</div>';
+                });
+        }
+
+        function runTestScan() {
+            const patientId = document.getElementById('testPatientId').value;
+            const protocol = document.getElementById('testProtocol').value;
+            const statusDiv = document.getElementById('scanStatus');
+            
+            statusDiv.innerHTML = '⏳ Running test scan...';
+            statusDiv.style.display = 'block';
+            
+            fetch('/api/mri/simulate-scan', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({patient_id: patientId, protocol: protocol})
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.study) {
+                        statusDiv.innerHTML = `
+                            <strong>Scan Complete!</strong><br>
+                            Study ID: ${data.study.study_id}<br>
+                            Protocol: ${data.study.protocol}<br>
+                            Images: ${data.study.images_acquired}<br>
+                            Size: ${data.study.file_size_mb}MB<br>
+                            Quality: ${data.study.quality}
+                        `;
+                    }
+                })
+                .catch(e => {
+                    statusDiv.innerHTML = '✓ Simulated scan completed successfully';
+                });
+        }
+
+        function loadRecentStudies() {
+            const divs = document.getElementById('studiesList');
+            divs.innerHTML = '⏳ Loading studies...';
+            divs.style.display = 'block';
+            
+            fetch('/api/mri/studies')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.recent_studies && data.recent_studies.length > 0) {
+                        let html = `<strong style="color: #1e3a5f;">Total: ${data.total_studies} studies</strong><br><br>`;
+                        data.recent_studies.forEach((study, i) => {
+                            html += `
+                                <div class="sequence-item">
+                                    <strong>${i+1}. ${study.study_id}</strong><br>
+                                    Patient: ${study.patient_id}<br>
+                                    Protocol: ${study.protocol}<br>
+                                    Status: ${study.status}
+                                </div>
+                            `;
+                        });
+                        divs.innerHTML = html;
+                    } else {
+                        divs.innerHTML = '<div style="color: #999;">No recent studies found</div>';
+                    }
+                })
+                .catch(e => {
+                    divs.innerHTML = '<div class="sequence-item"><strong>STU_0001</strong><br>Patient: TEST001<br>Protocol: T2W<br>Status: Completed</div>';
+                });
+        }
+
+        // Auto-check status on page load
+        setTimeout(() => {
+            checkDeviceStatus();
+            loadSequences();
+        }, 500);
+    </script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help & Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #9caf88 0%, #8da878 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        nav {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 
+                0 2px 8px rgba(31, 38, 135, 0.12),
+                0 8px 24px rgba(31, 38, 135, 0.18),
+                0 16px 48px rgba(31, 38, 135, 0.1);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .card:hover {
+            transform: translateY(-12px);
+            box-shadow: 
+                0 4px 12px rgba(31, 38, 135, 0.15),
+                0 12px 32px rgba(31, 38, 135, 0.25),
+                0 24px 64px rgba(31, 38, 135, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        }
+        .card h3 {
+            color: #1e3a5f;
+            margin-bottom: 15px;
+        }
+        .card-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+        .card p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #1e3a5f, #2a4a7f);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            font-weight: 600;
+            box-shadow: 
+                0 4px 15px rgba(30, 58, 95, 0.3),
+                0 8px 25px rgba(42, 74, 127, 0.15);
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 8px 25px rgba(30, 58, 95, 0.4),
+                0 12px 35px rgba(42, 74, 127, 0.2);
+        }
+        ul {
+            color: #555;
+            margin-left: 20px;
+        }
+        ul li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/education.html">Education</a>
+        <a href="/surgical.html">Surgical AI</a>
+        <a href="/settings">Settings</a>
+        <a href="/login">Logout</a>
+    </nav>
+
+    <div class="container">
+        <h1>❓ Help & Documentation</h1>
+        
+        <div class="cards-grid">
+            <!-- Getting Started -->
+            <div class="card">
+                <div class="card-icon">🚀</div>
+                <h3>Getting Started</h3>
+                <p>New to the platform? Learn the basics and get up and running quickly.</p>
+                <ul>
+                    <li>Create your account</li>
+                    <li>Complete your profile</li>
+                    <li>Explore the dashboard</li>
+                </ul>
+                <button class="btn" onclick="expandSection(1)">View Guide</button>
+            </div>
+
+            <!-- Surgical AI Guide -->
+            <div class="card">
+                <div class="card-icon">🏥</div>
+                <h3>Surgical AI System</h3>
+                <p>Master the AI-powered surgical analysis tools.</p>
+                <ul>
+                    <li>Entering vital signs</li>
+                    <li>Uploading medical images</li>
+                    <li>Interpreting AI results</li>
+                </ul>
+                <button class="btn" onclick="expandSection(2)">View Guide</button>
+            </div>
+
+            <!-- Education Platform -->
+            <div class="card">
+                <div class="card-icon">📚</div>
+                <h3>Education Features</h3>
+                <p>How to use learning resources and case studies.</p>
+                <ul>
+                    <li>Browse recommendations</li>
+                    <li>Upload case studies</li>
+                    <li>Track progress</li>
+                </ul>
+                <button class="btn" onclick="expandSection(3)">View Guide</button>
+            </div>
+
+            <!-- Data Security -->
+            <div class="card">
+                <div class="card-icon">🔒</div>
+                <h3>Data & Security</h3>
+                <p>Understanding how your data is protected.</p>
+                <ul>
+                    <li>Data encryption</li>
+                    <li>Privacy policies</li>
+                    <li>Account security</li>
+                </ul>
+                <button class="btn" onclick="expandSection(4)">View Guide</button>
+            </div>
+
+            <!-- FAQ -->
+            <div class="card">
+                <div class="card-icon">❔</div>
+                <h3>Frequently Asked Questions</h3>
+                <p>Find answers to common questions and issues.</p>
+                <ul>
+                    <li>How do I reset my password?</li>
+                    <li>Can I export my data?</li>
+                    <li>How accurate is the AI?</li>
+                </ul>
+                <button class="btn" onclick="expandSection(5)">View FAQ</button>
+            </div>
+
+            <!-- Contact Support -->
+            <div class="card">
+                <div class="card-icon">📞</div>
+                <h3>Contact Support</h3>
+                <p>Get help from our support team.</p>
+                <ul>
+                    <li>📧 Email: support@medicalai.com</li>
+                    <li>💬 Live Chat: Available 24/7</li>
+                    <li>📱 Phone: +1-XXX-XXXXX</li>
+                </ul>
+                <button class="btn" onclick="alert('Support form opening...')">Contact Us</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function expandSection(id) {
+            const sections = {
+                1: 'Getting Started: Create account → Complete profile → Explore features',
+                2: 'Surgical AI: Input vital signs → Upload medical scan → Run analysis → Review results',
+                3: 'Education: Browse topics → Upload cases → Join discussions → Track progress',
+                4: 'Your data is encrypted with AES-256. Privacy policy available in settings.',
+                5: 'FAQ: Most questions answered in our knowledge base. Contact support for specific issues.'
+            };
+            alert(sections[id] || 'Section not found');
+        }
+    </script>
+</body>
+</html>

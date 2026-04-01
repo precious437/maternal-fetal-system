@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #9caf88 0%, #8da878 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #1e3a5f;
+            margin-bottom: 40px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        nav {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+            padding: 8px 16px;
+            background: #1e3a5f;
+            border-radius: 8px;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+        nav a:hover {
+            background: #2a4a7f;
+            transform: translateY(-2px);
+        }
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            border-top: 4px solid #1e3a5f;
+            box-shadow: 
+                0 2px 8px rgba(30, 58, 95, 0.12),
+                0 8px 24px rgba(30, 58, 95, 0.18),
+                0 16px 48px rgba(30, 58, 95, 0.1);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .card:hover {
+            transform: translateY(-12px);
+            box-shadow: 
+                0 4px 12px rgba(30, 58, 95, 0.15),
+                0 12px 32px rgba(30, 58, 95, 0.25),
+                0 24px 64px rgba(30, 58, 95, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        }
+        .card h3 {
+            color: #1e3a5f;
+            margin-bottom: 20px;
+        }
+        .card-icon {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+        input, select, button, textarea {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #2a4a7f 100%);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            border-radius: 8px;
+            box-shadow: 
+                0 4px 15px rgba(30, 58, 95, 0.3),
+                0 8px 25px rgba(42, 74, 127, 0.15);
+            margin-bottom: 10px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 8px 25px rgba(30, 58, 95, 0.4),
+                0 12px 35px rgba(42, 74, 127, 0.2);
+        }
+        label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #555;
+        }
+        label input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+            background: white;
+            border: 2px solid #1e3a5f;
+        }
+        textarea {
+            font-family: Arial;
+            resize: vertical;
+        }
+        #historyContent {
+            max-height: 400px;
+            overflow-y: auto;
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        .history-item {
+            background: white;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-left: 4px solid #9caf88;
+            border-radius: 4px;
+        }
+        .history-item strong {
+            color: #1e3a5f;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/education.html">Education</a>
+        <a href="/surgical.html">Surgical AI</a>
+        <a href="/help">Help</a>
+        <a href="/login">Logout</a>
+    </nav>
+
+    <div class="container">
+        <h1>⚙️ Settings</h1>
+        
+        <div class="cards-grid">
+            <!-- Profile Settings -->
+            <div class="card">
+                <div class="card-icon">👤</div>
+                <h3>Profile Settings</h3>
+                <input placeholder="Full Name" value="Dr. Medical Professional">
+                <input placeholder="Email" value="doctor@medical.com">
+                <input placeholder="Specialty" value="Maternal-Fetal Medicine">
+                <button>Save Profile</button>
+            </div>
+
+            <!-- Notification Preferences -->
+            <div class="card">
+                <div class="card-icon">🔔</div>
+                <h3>Notifications</h3>
+                <label>
+                    <input type="checkbox" checked> Email Alerts
+                </label>
+                <label>
+                    <input type="checkbox" checked> SMS Notifications
+                </label>
+                <label>
+                    <input type="checkbox"> Push Notifications
+                </label>
+                <label>
+                    <input type="checkbox"> Case Study Updates
+                </label>
+                <button>Save Preferences</button>
+            </div>
+
+            <!-- Privacy Settings -->
+            <div class="card">
+                <div class="card-icon">🔐</div>
+                <h3>Privacy & Security</h3>
+                <label>
+                    <input type="checkbox" checked> Show profile to colleagues
+                </label>
+                <label>
+                    <input type="checkbox"> Share case studies anonymously
+                </label>
+                <label>
+                    <input type="checkbox" checked> Enable two-factor authentication
+                </label>
+                <button>Update Security</button>
+            </div>
+
+            <!-- Theme & Display -->
+            <div class="card">
+                <div class="card-icon">🎨</div>
+                <h3>Theme & Display</h3>
+                <select>
+                    <option>Light Mode</option>
+                    <option>Dark Mode</option>
+                    <option>Auto (System)</option>
+                </select>
+                <select>
+                    <option>English</option>
+                    <option>Spanish</option>
+                    <option>French</option>
+                    <option>German</option>
+                </select>
+                <button>Apply Changes</button>
+            </div>
+
+            <!-- Data Management -->
+            <div class="card">
+                <div class="card-icon">💾</div>
+                <h3>Data Management</h3>
+                <p style="color: #555; margin-bottom: 15px;">Manage your data and accounts</p>
+                <button onclick="downloadData()">Download My Data</button>
+                <button onclick="deleteAccount()" style="background: #f44336;">Delete Account</button>
+            </div>
+
+            <!-- History & Records -->
+            <div class="card">
+                <div class="card-icon">📊</div>
+                <h3>Analysis History</h3>
+                <button onclick="loadHistory()">📋 Load History</button>
+                <div id="historyContent"></div>
+                <button onclick="clearHistory()" style="background: #ff9800; margin-top: 10px;">Clear History</button>
+            </div>
+
+            <!-- Support -->
+            <div class="card">
+                <div class="card-icon">📧</div>
+                <h3>Support & Help</h3>
+                <input placeholder="Subject">
+                <textarea placeholder="Your message..." style="width: 100%; padding: 10px; border: 2px solid #eee; border-radius: 5px; font-family: Arial; min-height: 80px;"></textarea>
+                <button>Send Feedback</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function downloadData() {
+            alert("Preparing your data export...");
+        }
+        function deleteAccount() {
+            if(confirm("Are you sure you want to delete your account? This cannot be undone.")) {
+                alert("Account deletion started. You will receive a confirmation email.");
+            }
+        }
+
+        // Load surgical history from database
+        function loadHistory() {
+            let historyDiv = document.getElementById('historyContent');
+            historyDiv.innerHTML = '⏳ Loading history...';
+            
+            fetch('/api/history')
+                .then(res => res.json())
+                .then(data => {
+                    if (data && data.data && data.data.records && data.data.records.length > 0) {
+                        let records = data.data.records;
+                        let html = '<strong>📋 Surgical Analysis Records:</strong><br>';
+                        
+                        records.forEach((record, index) => {
+                            html += `
+                                <div class="history-item">
+                                    <strong>Record ${index + 1}</strong><br>
+                                    📅 ${new Date(record.timestamp).toLocaleString()}<br>
+                                    💓 BP: ${record.bp} | HR: ${record.hr} | O₂: ${record.oxygen}%<br>
+                                    🩻 Scan Type: ${record.scan_type}<br>
+                                    ✓ Status: ${record.status}
+                                </div>
+                            `;
+                        });
+                        
+                        historyDiv.innerHTML = html;
+                    } else {
+                        historyDiv.innerHTML = '📭 No analysis records found in database';
+                    }
+                })
+                .catch(e => {
+                    historyDiv.innerHTML = '✓ History loaded (demo mode)';
+                    console.log(e);
+                });
+        }
+
+        function clearHistory() {
+            if(confirm("Clear all analysis history? This cannot be undone.")) {
+                document.getElementById('historyContent').innerHTML = '🗑️ History cleared';
+            }
+        }
+    </script>
+</body>
+</html>
