@@ -58,6 +58,39 @@
   </ul>
 </nav>
   <!-- Paste the FULL TOP NAV here (same as index.html) -->
+  <!-- SHARED TOP NAVIGATION (COPY THIS EXACT BLOCK INTO EVERY HTML FILE) -->
+<nav class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+    <!-- Logo -->
+    <div class="flex items-center gap-x-3">
+      <i class="fa-solid fa-heart-pulse text-3xl text-[#00bfa5]"></i>
+      <div>
+        <h1 class="text-2xl font-semibold text-[#0a3d62]">Maternal-Fetal AI</h1>
+        <p class="text-xs text-slate-500 -mt-1">Surgical Prediction System</p>
+      </div>
+    </div>
+
+    <!-- Top Nav Buttons (ALL pages included – no missing links) -->
+    <div class="flex items-center gap-x-8 text-sm font-medium">
+      <a href="index.html" class="nav-link flex items-center gap-x-1 hover:text-[#00bfa5]"><i class="fa-solid fa-house"></i> Home</a>
+      <a href="surgical.html" class="nav-link flex items-center gap-x-1 hover:text-[#00bfa5]"><i class="fa-solid fa-robot"></i> Surgical AI</a>
+      <a href="mri-device.html" class="nav-link flex items-center gap-x-1 hover:text-[#00bfa5]"><i class="fa-solid fa-microchip"></i> MRI Device</a>
+      <a href="settings.html" class="nav-link flex items-center gap-x-1 hover:text-[#00bfa5]"><i class="fa-solid fa-cog"></i> Settings</a>
+      <a href="help.html" class="nav-link flex items-center gap-x-1 hover:text-[#00bfa5]"><i class="fa-solid fa-circle-question"></i> Help</a>
+      
+      <!-- User area -->
+      <div class="flex items-center gap-x-2 bg-slate-100 px-4 py-1 rounded-2xl">
+        <div class="w-8 h-8 bg-[#0a3d62] text-white rounded-xl flex items-center justify-center text-xs font-bold">PS</div>
+        <span class="text-sm font-medium">Precious • Surgeon</span>
+      </div>
+      
+      <a href="login.html" id="auth-button" 
+         class="bg-[#0a3d62] hover:bg-[#00bfa5] text-white px-6 py-2 rounded-3xl text-sm font-medium flex items-center gap-x-2 transition">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </a>
+    </div>
+  </div>
+</nav>
 
   <div class="max-w-7xl mx-auto flex">
     <!-- Sidebar (clean flow) -->
