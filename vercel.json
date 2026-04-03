@@ -4,9 +4,7 @@
     { "source": "/register", "destination": "/register.html" },
     { "source": "/settings", "destination": "/settings.html" },
     { "source": "/help", "destination": "/help.html" },
-    { "source": "/mri-device", "destination": "/mri-device.html" },
-    { "source": "/education", "destination": "/education.html" },
-    { "source": "/surgical", "destination": "/surgical.html" },
+     { "source": "/surgical", "destination": "/surgical.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
