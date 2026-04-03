@@ -1,71 +1,11 @@
+<!-- login.html -->
 <!DOCTYPE html>
-<html>
-<head><title>Login</title></head>
-
-<body style="margin:0; font-family:Arial; background:#9caf88;">
-
-<div style="max-width:400px; margin:auto; margin-top:100px; background:white; padding:30px; border-radius:10px;">
-
-<h2 style="text-align:center; color:#1e3a5f;">Login</h2>
-
-
-
-<input id="email" placeholder="Email" style="width:100%; padding:10px;"><br><br>
-
-<div style="position:relative;">
-<input type="password" id="pass" placeholder="Password" style="width:100%; padding:10px;">
-<span onclick="toggle()" style="position:absolute; right:10px; top:10px; cursor:pointer;">👁</span>
-</div><br>
-
-<button onclick="handleLogin()" style="width:100%; padding:10px; background:#1e3a5f; color:white; cursor:pointer;">Login</button>
-<button onclick="toggleRegister()" style="width:100%; padding:10px; background:#555; color:white; margin-top:10px; cursor:pointer;">Register</button>
-
-<div id="message" style="margin-top:10px; text-align:center; color:red;"></div>
-
-</div>
-
-<script>
-function toggle(){
-let p=document.getElementById("pass");
-p.type=p.type==="password"?"text":"password";
-}
-
-async function handleLogin(){
-const email = document.getElementById('email').value;
-const password = document.getElementById('pass').value;
-const role = document.getElementById('role').value;
-const msg = document.getElementById('message');
-
-if(!email || !password){
-msg.textContent = 'Please fill all fields';
-return;
-}
-
-try {
-const response = await fetch('/api/login', {
-method: 'POST',
-headers: {'Content-Type': 'application/json'},
-body: JSON.stringify({email, password, role})
-});
-
-const data = await response.json();
-
-if(data.success){
-msg.style.color = 'green';
-msg.textContent = 'Login successful!';
-setTimeout(() => window.location.href = '/', 1500);
-} else {
-msg.textContent = data.message || 'Login failed';
-}
-} catch(e){
-msg.textContent = 'Error: ' + e.message;
-}
-}
-
-function toggleRegister(){
-alert('Registration coming soon!');
-}
-</script>
-
-</body>
-</html>
+<html lang="en"><head><!-- same head as surgical.html --></head><body class="bg-slate-50 flex items-center justify-center min-h-screen">
+  <div class="bg-white rounded-3xl shadow-2xl p-10 w-full max-w-md">
+    <h1 class="text-3xl font-semibold text-[#0a3d62]">Login to Surgical AI</h1>
+    <input type="email" placeholder="Email" class="w-full mt-8 border rounded-3xl px-5 py-4">
+    <input type="password" placeholder="Password" class="w-full mt-4 border rounded-3xl px-5 py-4">
+    <button onclick="window.location.href='surgical.html'" class="w-full mt-8 bg-[#0a3d62] text-white py-4 rounded-3xl">Login Securely</button>
+  </div>
+  <!-- Paste LUMI.AI CHAT WIDGET here -->
+</body></html>
