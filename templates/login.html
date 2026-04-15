@@ -18,6 +18,10 @@
     <p class="text-slate-500 text-center mt-2">Access the Surgical AI System</p>
 
     <form id="loginForm" class="mt-10 space-y-6">
+      {% csrf_token %}
+      <div id="errorMsg" class="hidden bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-2xl text-sm text-center">
+        <!-- Error message injected here -->
+      </div>
       <div>
         <label class="block text-sm font-medium text-slate-600 mb-1">Email</label>
         <input id="email" type="email" placeholder="your@email.com" required 
@@ -70,10 +74,11 @@
 
         const data = await res.json();
 
+        const errorMsg = document.getElementById('errorMsg');
         if (data.success) {
           // Store user info for personalization
           localStorage.setItem('lumi_user', JSON.stringify(data.user || { email: email }));
-          window.location.href = 'surgical.html';
+          window.location.href = '/surgical.html';
         } else {
           // Show the specific error from Supabase (e.g., "Invalid credentials" or "User not confirmed")
           errorMsg.textContent = `Authorization Error: ${data.error || "Access Denied"}`;

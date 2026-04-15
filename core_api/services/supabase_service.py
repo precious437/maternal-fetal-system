@@ -59,12 +59,16 @@ class SupabaseService:
                 if response.status_code < 400:
                     return {"success": True, "token": response.json().get("access_token"), "user": response.json().get("user")}
                 
-                # Detailed error log for the admin
-                error_data = response.json()
-                msg = error_data.get("error_description", error_data.get("msg", "Login failed"))
+                # Detailed error parsing
+                try:
+                    error_data = response.json()
+                    msg = error_data.get("error_description") or error_data.get("msg") or error_data.get("error") or "Authentication failed"
+                except:
+                    msg = response.text or "Unknown login error"
+                    
                 return {"success": False, "error": msg}
             except Exception as e:
-                return {"success": False, "error": f"Auth Service unreachable: {str(e)}"}
+                return {"success": False, "error": f"Auth Server unreachable: {str(e)}"}
 
     @staticmethod
     async def get_history():

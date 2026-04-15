@@ -19,6 +19,7 @@ from django.urls import path, include
 from django.views.generic import TemplateView
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 def custom_handler404(request, exception):
     if request.path.startswith('/api/'):
@@ -35,7 +36,7 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='index.html'), name='home'),
     path('index.html', TemplateView.as_view(template_name='index.html')),
     path('surgical.html', TemplateView.as_view(template_name='surgical.html'), name='surgical'),
-    path('login.html', TemplateView.as_view(template_name='login.html'), name='login'),
+    path('login.html', ensure_csrf_cookie(TemplateView.as_view(template_name='login.html')), name='login'),
     path('settings.html', TemplateView.as_view(template_name='settings.html'), name='settings'),
     path('help.html', TemplateView.as_view(template_name='help.html'), name='help'),
 ]
