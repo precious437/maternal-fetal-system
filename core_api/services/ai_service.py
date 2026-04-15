@@ -14,7 +14,7 @@ class AIService:
     WORKFLOW_ID = os.getenv("ROBOFLOW_WORKFLOW_ID", "detect-count-and-visualize")
     
     @staticmethod
-    async def analyze_scan(file_path):
+    def analyze_scan(file_path):
         """Send image to Roboflow for anomaly detection"""
         if not AIService.API_KEY or AIService.API_KEY == "YOUR_API_KEY":
             logger.warning("AIService: No Roboflow API Key configured. Skipping AI analysis.")
@@ -23,10 +23,10 @@ class AIService:
         try:
             url = f"{AIService.API_URL}/{AIService.WORKSPACE}/{AIService.WORKFLOW_ID}?api_key={AIService.API_KEY}"
             
-            async with httpx.AsyncClient(timeout=20.0) as client:
+            with httpx.Client(timeout=20.0) as client:
                 with open(file_path, "rb") as image_file:
                     files = {"image": image_file} # Workflow uses "image" key
-                    response = await client.post(url, files=files)
+                    response = client.post(url, files=files)
                 
                 if response.status_code == 200:
                     result = response.json()

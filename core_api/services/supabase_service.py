@@ -12,14 +12,14 @@ class SupabaseService:
         }
 
     @staticmethod
-    async def save_vitals(data):
+    def save_vitals(data):
         url = f"{settings.SUPABASE_URL}/rest/v1/patient_vitals"
-        async with httpx.AsyncClient() as client:
-            response = await client.post(url, json=data, headers=SupabaseService.get_headers())
+        with httpx.Client() as client:
+            response = client.post(url, json=data, headers=SupabaseService.get_headers())
             return response.json() if response.status_code < 400 else {"error": response.text}
 
     @staticmethod
-    async def upload_file(file_obj, filename):
+    def upload_file(file_obj, filename):
         # Supabase Storage Upload
         url = f"{settings.SUPABASE_URL}/storage/v1/object/{settings.SUPABASE_BUCKET}/{filename}"
         headers = {
@@ -27,8 +27,8 @@ class SupabaseService:
             "Authorization": f"Bearer {settings.SUPABASE_SERVICE_ROLE_KEY}",
             "Content-Type": "application/octet-stream"
         }
-        async with httpx.AsyncClient() as client:
-            response = await client.post(url, content=file_obj.read(), headers=headers)
+        with httpx.Client() as client:
+            response = client.post(url, content=file_obj.read(), headers=headers)
             if response.status_code < 400:
                 return {
                     "success": True,
@@ -37,14 +37,14 @@ class SupabaseService:
             return {"success": False, "error": response.text}
 
     @staticmethod
-    async def save_scan_metadata(metadata):
+    def save_scan_metadata(metadata):
         url = f"{settings.SUPABASE_URL}/rest/v1/medical_scans"
-        async with httpx.AsyncClient() as client:
-            response = await client.post(url, json=metadata, headers=SupabaseService.get_headers())
+        with httpx.Client() as client:
+            response = client.post(url, json=metadata, headers=SupabaseService.get_headers())
             return response.json() if response.status_code < 400 else {"error": response.text}
 
     @staticmethod
-    async def verify_login(email, password):
+    def verify_login(email, password):
         # Supabase Auth Login
         url = f"{settings.SUPABASE_URL}/auth/v1/token?grant_type=password"
         headers = {
@@ -53,9 +53,9 @@ class SupabaseService:
             "Content-Type": "application/json"
         }
         data = {"email": email, "password": password}
-        async with httpx.AsyncClient() as client:
+        with httpx.Client() as client:
             try:
-                response = await client.post(url, json=data, headers=headers)
+                response = client.post(url, json=data, headers=headers)
                 if response.status_code < 400:
                     return {"success": True, "token": response.json().get("access_token"), "user": response.json().get("user")}
                 
@@ -68,14 +68,14 @@ class SupabaseService:
                     
                 return {"success": False, "error": msg}
             except Exception as e:
-                return {"success": False, "error": f"Auth Server unreachable: {str(e)}"}
+                return {"success": False, "error": f"Auth Service unreachable: {str(e)}"}
 
     @staticmethod
-    async def get_history():
+    def get_history():
         # Fetch from patient_vitals table
         url = f"{settings.SUPABASE_URL}/rest/v1/patient_vitals?select=*"
-        async with httpx.AsyncClient() as client:
-            response = await client.get(url, headers=SupabaseService.get_headers())
+        with httpx.Client() as client:
+            response = client.get(url, headers=SupabaseService.get_headers())
             if response.status_code < 400:
                 return {"success": True, "records": response.json()}
             return {"success": False, "error": response.text}
