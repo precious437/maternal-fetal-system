@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login • Maternal-Fetal AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Inter', system_ui, sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex items-center justify-center">
+  <div class="max-w-md w-full bg-white rounded-3xl shadow-2xl p-10">
+    <div class="flex justify-center mb-8">
+      <i class="fa-solid fa-heart-pulse text-6xl text-[#00bfa5]"></i>
+    </div>
+    <h1 class="text-3xl font-semibold text-center text-[#0a3d62]">Sign In</h1>
+    <p class="text-slate-500 text-center mt-2">Access the Surgical AI System</p>
+
+    <form id="loginForm" class="mt-10 space-y-6">
+      <div>
+        <label class="block text-sm font-medium text-slate-600 mb-1">Email</label>
+        <input id="email" type="email" placeholder="your@email.com" required 
+               class="w-full border border-slate-300 rounded-3xl px-5 py-4 focus:border-[#00bfa5]">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-slate-600 mb-1">Password</label>
+        <input id="password" type="password" placeholder="Password" required 
+               class="w-full border border-slate-300 rounded-3xl px-5 py-4 focus:border-[#00bfa5]">
+      </div>
+
+      <button type="submit" 
+              class="w-full bg-[#0a3d62] hover:bg-[#00bfa5] text-white py-4 rounded-3xl font-semibold text-lg">
+        Sign In
+      </button>
+    </form>
+  </div>
+
+  <script>
+    // CSRF Token helper
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      try {
+        const res = await fetch('/api/v1/login/', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+          },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          // Store user info for personalization
+          localStorage.setItem('lumi_user', JSON.stringify(data.user || { email: email }));
+          window.location.href = 'surgical.html';
+        } else {
+          // Show the specific error from Supabase (e.g., "Invalid credentials" or "User not confirmed")
+          errorMsg.textContent = `Authorization Error: ${data.error || "Access Denied"}`;
+          errorMsg.classList.remove('hidden');
+        }
+      } catch (err) {
+        alert("Cannot connect to server. Please ensure Django is running.");
+      }
+    });
+  </script>
+</body>
+</html>
+  
+       
+  
