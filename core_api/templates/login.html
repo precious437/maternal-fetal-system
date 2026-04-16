@@ -90,6 +90,14 @@
           Sign In
         </button>
       </form>
+      
+      <!-- Toggle Mode -->
+      <div class="mt-8 text-center">
+        <p class="text-slate-500">
+          <span id="toggleText">Don't have an account?</span>
+          <button id="toggleBtn" class="text-[#0a3d62] font-bold hover:text-[#00bfa5] ml-1 transition">Sign Up</button>
+        </p>
+      </div>
     </div>
   </div>
 
@@ -117,6 +125,18 @@
     const formTitle = document.getElementById('formTitle');
     const formDesc = document.getElementById('formDesc');
     const submitBtn = document.getElementById('submitBtn');
+    const toggleBtn = document.getElementById('toggleBtn');
+    const toggleText = document.getElementById('toggleText');
+
+    toggleBtn.addEventListener('click', () => {
+      isLoginMode = !isLoginMode;
+      formTitle.textContent = isLoginMode ? 'Sign In' : 'Create Account';
+      formDesc.textContent = isLoginMode ? 'Access your clinical dashboard' : 'Join our maternal care network';
+      submitBtn.textContent = isLoginMode ? 'Sign In' : 'Create Account';
+      toggleText.textContent = isLoginMode ? "Don't have an account?" : "Already have an account?";
+      toggleBtn.textContent = isLoginMode ? 'Sign Up' : 'Sign In';
+      document.getElementById('errorMsg').classList.add('hidden');
+    });
 
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
