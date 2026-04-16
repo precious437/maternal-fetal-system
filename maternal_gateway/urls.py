@@ -16,10 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.views.generic import TemplateView
+from core_api import views as frontend_views
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.views.decorators.csrf import ensure_csrf_cookie
 
 def custom_handler404(request, exception):
     if request.path.startswith('/api/'):
@@ -33,10 +32,9 @@ urlpatterns = [
     path('api/v1/', include('core_api.urls')),
     
     # Frontend Pages
-    path('', TemplateView.as_view(template_name='index.html'), name='home'),
-    path('index.html', TemplateView.as_view(template_name='index.html')),
-    path('surgical.html', TemplateView.as_view(template_name='surgical.html'), name='surgical'),
-    path('login.html', ensure_csrf_cookie(TemplateView.as_view(template_name='login.html')), name='login'),
-    path('settings.html', TemplateView.as_view(template_name='settings.html'), name='settings'),
-    path('help.html', TemplateView.as_view(template_name='help.html'), name='help'),
+    path('', frontend_views.home_view, name='home'),
+    path('surgical', frontend_views.surgical_view, name='surgical'),
+    path('login', frontend_views.login_view, name='login'),
+    path('settings', frontend_views.settings_view, name='settings'),
+    path('help', frontend_views.help_view, name='help'),
 ]

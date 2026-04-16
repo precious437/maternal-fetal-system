@@ -31,8 +31,8 @@
       </div>
       <div class="flex gap-6 text-sm font-medium">
         <a href="/" class="hover:text-teal-400 transition">Dashboard</a>
-        <a href="/surgical.html" class="hover:text-teal-400 transition">Surgical Chamber</a>
-        <a href="/login.html" class="text-rose-400 hover:text-rose-300 transition">Logout</a>
+        <a href="/surgical" class="hover:text-teal-400 transition">Surgical Chamber</a>
+        <a href="/login" class="text-rose-400 hover:text-rose-300 transition">Logout</a>
       </div>
     </div>
   </nav>
@@ -108,6 +108,12 @@
   <script>
     // Load local user data
     document.addEventListener('DOMContentLoaded', () => {
+      // Enforce authentication
+      if (!localStorage.getItem('lumi_user')) {
+        window.location.replace('/login');
+        return;
+      }
+
       const userData = JSON.parse(localStorage.getItem('lumi_user') || '{}');
       if (userData.email) {
         document.getElementById('userEmail').textContent = userData.email;

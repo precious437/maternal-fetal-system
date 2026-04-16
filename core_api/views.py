@@ -2,6 +2,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.conf import settings
+from django.shortcuts import render
 from .services.supabase_service import SupabaseService
 from .services.ai_service import AIService
 import os
@@ -18,7 +19,7 @@ class VitalsView(APIView):
     def post(self, request):
         try:
             data = request.data
-            result = SupabaseService.save_vitals(data)
+            result = async_to_sync(SupabaseService.save_vitals)(data)
             return Response(result, status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
@@ -63,7 +64,7 @@ class FileUploadView(APIView):
 
             # 3. Upload to Supabase Storage (Core Task)
             uploaded_file.seek(0)
-            upload_result = SupabaseService.upload_file(uploaded_file, unique_filename)
+            upload_result = async_to_sync(SupabaseService.upload_file)(uploaded_file, unique_filename)
             
             if not upload_result.get("success"):
                 return Response({"error": f"Storage failure: {upload_result.get('error')}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -71,24 +72,19 @@ class FileUploadView(APIView):
             # 4. AI Analysis (Isolated Task)
             ai_result = {"success": False, "error": "AI evaluation skipped"}
             try:
-                ai_result = AIService.analyze_scan(temp_path)
+                ai_result = async_to_sync(AIService.analyze_scan)(temp_path)
             except Exception as aix:
                 print(f"AI Service Skip: {str(aix)}")
 
-            # 5. Save metadata to DB (OPTIONAL - Skip if table doesn't exist)
+            # 5. Save metadata to DB (History)
             db_metadata = {
                 "filename": original_filename,
                 "image_url": upload_result.get("url"),
-                "processed_as": "DICOM" if file_ext == '.dcm' else "IMAGE"
+                "processed_as": "DICOM" if file_ext == '.dcm' else "IMAGE",
+                "analysis_results": ai_result  # Save findings for later inspection
             }
             
-            try:
-                # We log the attempt but don't fail if the table is missing
-                sync_db = SupabaseService.save_scan_metadata(db_metadata)
-                if "error" in sync_db:
-                    print(f"Sub-system Warning: Metadata table missing or inaccessible. Simulation proceeding.")
-            except Exception as dbx:
-                print(f"Sub-system Skip: Metadata DB error: {str(dbx)}")
+            async_to_sync(SupabaseService.save_scan_metadata)(db_metadata)
 
             return Response({
                 "success": True,
@@ -114,19 +110,45 @@ class LoginView(APIView):
         try:
             email = request.data.get("email")
             password = request.data.get("password")
-            result = SupabaseService.verify_login(email, password)
+            result = async_to_sync(SupabaseService.verify_login)(email, password)
             if result.get("success"):
                 return Response(result, status=status.HTTP_200_OK)
             return Response(result, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
+class SignupView(APIView):
+    def post(self, request):
+        try:
+            email = request.data.get("email")
+            password = request.data.get("password")
+            result = async_to_sync(SupabaseService.signup_user)(email, password)
+            if result.get("success"):
+                return Response(result, status=status.HTTP_201_CREATED)
+            return Response(result, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
 class HistoryView(APIView):
     def get(self, request):
         try:
-            result = SupabaseService.get_history()
-            if result.get("success"):
-                return Response(result, status=status.HTTP_200_OK)
-            return Response(result, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            result = async_to_sync(SupabaseService.get_scan_history)()
+            return Response({"success": True, "history": result}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+# --- FRONTEND VIEWS ---
+def home_view(request):
+    return render(request, 'index.html')
+
+def surgical_view(request):
+    return render(request, 'surgical.html')
+
+def login_view(request):
+    return render(request, 'login.html')
+
+def settings_view(request):
+    return render(request, 'settings.html')
+
+def help_view(request):
+    return render(request, 'help.html')
