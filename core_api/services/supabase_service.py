@@ -72,8 +72,8 @@ class SupabaseService:
         # Supabase Auth Login
         url = f"{settings.SUPABASE_URL}/auth/v1/token?grant_type=password"
         headers = {
-            "apikey": settings.SUPABASE_SERVICE_ROLE_KEY,
-            "Authorization": f"Bearer {settings.SUPABASE_SERVICE_ROLE_KEY}",
+            "apikey": settings.SUPABASE_ANON_KEY,
+            "Authorization": f"Bearer {settings.SUPABASE_ANON_KEY}",
             "Content-Type": "application/json"
         }
         data = {"email": email, "password": password}
@@ -94,8 +94,8 @@ class SupabaseService:
     def signup_user(email, password):
         url = f"{settings.SUPABASE_URL}/auth/v1/signup"
         headers = {
-            "apikey": settings.SUPABASE_SERVICE_ROLE_KEY,
-            "Authorization": f"Bearer {settings.SUPABASE_SERVICE_ROLE_KEY}",
+            "apikey": settings.SUPABASE_ANON_KEY,
+            "Authorization": f"Bearer {settings.SUPABASE_ANON_KEY}",
             "Content-Type": "application/json"
         }
         data = {"email": email, "password": password}
